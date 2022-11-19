@@ -2,14 +2,14 @@
 
 public static class IdGenerator
 {
-    private static Mutex _mutex = new();
-    private static int Id = 0;
+    private static readonly Mutex Mutex = new();
+    private static int _id = 0;
 
     public static int GenerateId()
     {
-        _mutex.WaitOne();
-        Id++;
-        _mutex.ReleaseMutex();
-        return Id;
+        Mutex.WaitOne();
+        _id++;
+        Mutex.ReleaseMutex();
+        return _id;
     }
 }

@@ -7,8 +7,8 @@ namespace Server1.Controllers;
 public class ServerController : ControllerBase
 {
     [HttpGet]
-    public async Task Index()
+    public Task Index()
     {
-        
+        return Task.CompletedTask;
     }
 }

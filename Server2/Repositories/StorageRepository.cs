@@ -1,6 +1,6 @@
 ﻿namespace Server2.Repositories;
 
-public class StorageRepository
+public class StorageRepository : IStorageRepository
 {
     
 }

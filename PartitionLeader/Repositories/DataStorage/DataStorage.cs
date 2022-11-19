@@ -1,7 +1,7 @@
 ﻿using PartitionLeader.Models;
-using Swashbuckle.AspNetCore.SwaggerGen;
+using PartitionLeader.Repositories.SharedStorage;
 
-namespace PartitionLeader.Repositories;
+namespace PartitionLeader.Repositories.DataStorage;
 
 public class DataStorage : IDataStorage
 {

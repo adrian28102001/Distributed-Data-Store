@@ -1,6 +1,8 @@
-﻿using PartitionLeader.Services;
+﻿using Server1.Repositories;
+using Server1.Services;
 
-namespace PartitionLeader.Settings;
+namespace Server1;
+
 public class Startup
 {
     private IConfiguration ConfigRoot { get; }
@@ -12,7 +14,8 @@ public class Startup
         services.AddEndpointsApiExplorer();
         services.AddSwaggerGen();
         services.AddLogging(config => config.ClearProviders());
-        
+
+        services.AddSingleton<IStorageRepository, StorageRepository>();
         services.AddSingleton<ISyncService, SyncService>();
         services.AddHostedService<BackgroundTask.BackgroundTask>();
     }
@@ -22,7 +25,7 @@ public class Startup
         ConfigRoot = configuration;
     }
 
-    public void Configure(WebApplication app, IWebHostEnvironment env)
+    public static void Configure(WebApplication app, IWebHostEnvironment env)
     {
         // Configure the HTTP request pipeline.
         if (env.IsDevelopment())
@@ -36,10 +39,7 @@ public class Startup
         app.UseHttpsRedirection();
 
         app.UseRouting();
-        app.UseEndpoints(endpoints =>
-        {
-            endpoints.MapControllers();
-        });
+        app.UseEndpoints(endpoints => { endpoints.MapControllers(); });
 
         app.Run();
     }

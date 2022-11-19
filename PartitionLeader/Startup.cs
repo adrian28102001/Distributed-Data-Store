@@ -1,6 +1,6 @@
-﻿using Server1.Services;
+﻿using PartitionLeader.Services.Sync;
 
-namespace Server1.Settings;
+namespace PartitionLeader;
 public class Startup
 {
     private IConfiguration ConfigRoot { get; }
@@ -22,7 +22,7 @@ public class Startup
         ConfigRoot = configuration;
     }
 
-    public void Configure(WebApplication app, IWebHostEnvironment env)
+    public static void Configure(WebApplication app, IWebHostEnvironment env)
     {
         // Configure the HTTP request pipeline.
         if (env.IsDevelopment())

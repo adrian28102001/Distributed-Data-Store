@@ -1,8 +1,7 @@
 ﻿using PartitionLeader.Helpers;
-using PartitionLeader.Models;
-using PartitionLeader.Repositories;
+using PartitionLeader.Repositories.DataStorage;
 
-namespace PartitionLeader.Services;
+namespace PartitionLeader.Services.Data;
 
 public class DataService : IDataService
 {
@@ -13,23 +12,23 @@ public class DataService : IDataService
         _dataStorage = dataStorage;
     }
 
-    public KeyValuePair<int, Data> GetById(int id)
+    public KeyValuePair<int, Models.Data> GetById(int id)
     {
         return _dataStorage.GetById(id);
     }
 
-    public IDictionary<int, Data> GetAll()
+    public IDictionary<int, Models.Data> GetAll()
     {
         return _dataStorage.GetAll();
     }
 
-    public void Save(Data data)
+    public void Save(Models.Data data)
     {
         var id = IdGenerator.GenerateId();
         _dataStorage.Save(id, data);
     }
 
-    public Data Update(int id, Data data)
+    public Models.Data Update(int id, Models.Data data)
     {
         return _dataStorage.Update(id, data);
     }
