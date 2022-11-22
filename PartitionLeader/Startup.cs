@@ -1,4 +1,7 @@
-﻿using PartitionLeader.Services.Sync;
+﻿using PartitionLeader.Repositories.DataStorage;
+using PartitionLeader.Repositories.GenericRepository;
+using PartitionLeader.Services.DataService;
+using PartitionLeader.Services.Sync;
 
 namespace PartitionLeader;
 public class Startup
@@ -14,7 +17,10 @@ public class Startup
         services.AddLogging(config => config.ClearProviders());
         
         services.AddSingleton<ISyncService, SyncService>();
-        services.AddHostedService<BackgroundTask.BackgroundTask>();
+        services.AddSingleton<IDataService, DataService>();
+        services.AddSingleton<IDataStorageRepository, DataStorageRepository>();
+        services.AddSingleton(typeof(IGenericRepository<>), typeof(GenericRepository<>));
+        services.AddHostedService<BackgroundTask.BackgroundTask>();;
     }
 
     public Startup(IConfiguration configuration)
