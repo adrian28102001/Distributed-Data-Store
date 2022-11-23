@@ -1,6 +1,6 @@
-﻿using PartitionLeader.Models;
+﻿using Server1.Models;
 
-namespace PartitionLeader.Services;
+namespace Server1.Services;
 
 public static class StorageStatus
 {

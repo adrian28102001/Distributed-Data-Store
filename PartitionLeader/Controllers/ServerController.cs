@@ -1,7 +1,9 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using PartitionLeader.Helpers.Mappers;
 using PartitionLeader.Models;
+using PartitionLeader.Services;
 using PartitionLeader.Services.DataService;
+using PartitionLeader.Services.HttpService;
 
 namespace PartitionLeader.Controllers;
 
@@ -10,10 +12,12 @@ namespace PartitionLeader.Controllers;
 public class ServerController : ControllerBase
 {
     private readonly IDataService _dataService;
+    private readonly IHttpService _httpService;
 
-    public ServerController(IDataService dataService)
+    public ServerController(IDataService dataService, IHttpService httpService)
     {
         _dataService = dataService;
+        _httpService = httpService;
     }
 
     [HttpGet("/all")]
@@ -33,7 +37,10 @@ public class ServerController : ControllerBase
     {
         var data = dataModel.MapData();
         var result = await _dataService.Save(data.Id, data);
-
+        
+        var server1Result = await _httpService.Save(data, Settings.Settings.Server1);
+        server1Result?.UpdateStatus();
+        result.UpdateStatus();
         return result;
     }
 

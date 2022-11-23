@@ -1,5 +1,9 @@
 ﻿using Server1.Repositories;
+using Server1.Repositories.DataStorage;
+using Server1.Repositories.GenericRepository;
 using Server1.Services;
+using Server1.Services.DataService;
+using Server1.Services.Sync;
 
 namespace Server1;
 
@@ -15,8 +19,11 @@ public class Startup
         services.AddSwaggerGen();
         services.AddLogging(config => config.ClearProviders());
 
-        services.AddSingleton<IStorageRepository, StorageRepository>();
         services.AddSingleton<ISyncService, SyncService>();
+        services.AddSingleton<IDataService, DataService>();
+        services.AddSingleton<IDataStorageRepository, DataStorageRepository>();
+        // services.AddSingleton<IHttpService, HttpService>();
+        services.AddSingleton(typeof(IGenericRepository<>), typeof(GenericRepository<>));
         services.AddHostedService<BackgroundTask.BackgroundTask>();
     }
 

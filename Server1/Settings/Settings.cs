@@ -1,19 +1,26 @@
-﻿namespace Server1.Settings;
+﻿using Server1.Models;
+
+namespace Server1.Settings;
 
 public static class Settings
 {
-    public static readonly bool Leader = false;
-    
-    public static readonly string ClientUrl = "http://host.docker.internal:7139"; //docker
-    // public static readonly string ClientUrl = "https://localhost:7139"; //local
-    
-    public static readonly int TimeUnit = 1; //seconds = 1000  ms = 1 minutes = 60000 
-}
-/*
-to run docker for dininghall container: 
-BUILD IMAGE:
-docker build -t dininghall .
+    public static readonly ServerName ServerName = ServerName.PartitionLeader;
 
-RUN CONTAINER: map local_port:exposed_port
-docker run --name dininghall-container -p 7090:80 dininghall
-*/
+    public static readonly bool Leader = true;
+
+    // public static readonly string ServerIP = "localhost";
+    private const string ServerIp = "host.docker.internal";
+
+    public const int Port = 5112;
+
+    // public static readonly string BaseUrl = $"https://localhost:"; //local
+    public const string BaseUrl = $"https://{ServerIp}:";
+    public static readonly string ThisServerUrl = $"https://{ServerIp}:{Port}"; //docker
+    public static readonly string PartitionLeader = $"https://{ServerIp}:{7112}"; //local
+    public static readonly string Server1 = $"https://{ServerIp}:{7173}"; //local
+    public static readonly string Server2 = $"https://{ServerIp}:{7156}"; //local
+    
+    // public static readonly string PartitionLeader = $"https://localhost:{7112}"; //local
+    // public static readonly string Server1 = $"https://localhost:{7173}"; //local
+    // public static readonly string Server2 = $"https://localhost:{7156}"; //local
+}

@@ -1,4 +1,4 @@
-﻿namespace Server1.Services;
+﻿namespace Server1.Services.Sync;
 
 public class SyncService : ISyncService
 {
