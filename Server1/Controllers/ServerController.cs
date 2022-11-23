@@ -41,8 +41,14 @@ public class ServerController : ControllerBase
     {
         var result = await _dataService.Save(data);
         
-        result.UpdateStatus();
-        return result;
+        // result.UpdateStatus();
+        return new Result()
+        {
+            Port = 123,
+            ServerName = ServerName.Server1,
+            StorageCount = _dataService.GetAll().Result.Count,
+            LastProcessedId = data.Id
+        };
     }
   
 
