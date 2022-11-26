@@ -1,8 +1,8 @@
 ﻿namespace PartitionLeader.Helpers;
 
-public static class PrintConsole
+public static class ConsoleHelper
 {
-    public static void Write(string message, ConsoleColor color)
+    public static void Print(string message, ConsoleColor color)
     {
         Console.ForegroundColor = color;
         Console.WriteLine(message);

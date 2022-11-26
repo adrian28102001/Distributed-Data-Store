@@ -1,10 +1,14 @@
-﻿using PartitionLeader.Models;
+﻿using PartitionLeader.Helpers;
+using PartitionLeader.Models;
+using PartitionLeader.Services.ServersDetails;
 
 namespace PartitionLeader.Services;
 
-public static class StorageStatus
+public class StorageStatus : IStorageStatus
 {
-    public static Result PartitionLeaderStatus = new()
+    private readonly IServerDetails _serverDetails;
+    
+    private Result _partitionLeaderStatus = new()
     {
         StorageCount = 0,
         LastProcessedId = 0,
@@ -12,46 +16,46 @@ public static class StorageStatus
         ServerName = Settings.Settings.ServerName
     };
 
-    public static Result Server1Status = new()
+    private Result _server1Status = new()
     {
         StorageCount = 0,
         LastProcessedId = 0
     };
 
-    public static Result Server2Status = new()
+    private Result _server2Status = new()
     {
         StorageCount = 0,
         LastProcessedId = 0
     };
 
-    public static string GetBestServerUrl()
+    public StorageStatus(IServerDetails serverDetails)
     {
-        var optimalServer = PartitionLeaderStatus;
-        if (optimalServer.StorageCount > Server1Status.StorageCount)
-        {
-            optimalServer = Server1Status;
-        }
+        _serverDetails = serverDetails;
+    }
 
-        if (optimalServer.StorageCount > Server2Status.StorageCount)
-        {
-            optimalServer = Server2Status;
-        }
+    public string GetBestServerUrl()
+    {
+        var serverDetails = _serverDetails.GetServersCapacity();
+        var optimalServer = serverDetails.MinBy(pair => pair.Value);
 
-        return $"{Settings.Settings.BaseUrl}{optimalServer.Port}";
+        var url = Settings.Settings.GetUrlByServerId(optimalServer.Key);
+        ConsoleHelper.Print($"Best server is {url}", ConsoleColor.Yellow);
+        
+        return url;
     }
     
-    public static void UpdateStatus(this Result result)
+    public void UpdateStatus(Result result)
     {
         switch (result.ServerName)
         {
             case ServerName.PartitionLeader:
-                PartitionLeaderStatus = result;
+                _partitionLeaderStatus = result;
                 break;
             case ServerName.Server1:
-                Server1Status = result;
+                _server1Status = result;
                 break;
             case ServerName.Server2:
-                Server2Status = result;
+                _server2Status = result;
                 break;
             default:
                 throw new ArgumentOutOfRangeException();

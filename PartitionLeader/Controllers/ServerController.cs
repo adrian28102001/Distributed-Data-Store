@@ -13,11 +13,13 @@ public class ServerController : ControllerBase
 {
     private readonly IDataService _dataService;
     private readonly IHttpService _httpService;
+    private readonly IStorageStatus _storageStatus;
 
-    public ServerController(IDataService dataService, IHttpService httpService)
+    public ServerController(IDataService dataService, IHttpService httpService, IStorageStatus storageStatus)
     {
         _dataService = dataService;
         _httpService = httpService;
+        _storageStatus = storageStatus;
     }
 
     [HttpGet("/all")]
@@ -37,10 +39,10 @@ public class ServerController : ControllerBase
     {
         var data = dataModel.MapData();
         var result = await _dataService.Save(data.Id, data);
-        
-        var server1Result = await _httpService.Save(data, Settings.Settings.Server1);
-        server1Result?.UpdateStatus();
-        result.UpdateStatus();
+
+        var url = _storageStatus.GetBestServerUrl();
+        var server1Result = await _httpService.Save(data, url);
+
         return result;
     }
 

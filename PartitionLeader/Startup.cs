@@ -1,7 +1,9 @@
 ﻿using PartitionLeader.Repositories.DataStorage;
 using PartitionLeader.Repositories.GenericRepository;
+using PartitionLeader.Services;
 using PartitionLeader.Services.DataService;
 using PartitionLeader.Services.HttpService;
+using PartitionLeader.Services.ServersDetails;
 using PartitionLeader.Services.Sync;
 
 namespace PartitionLeader;
@@ -21,6 +23,8 @@ public class Startup
         services.AddSingleton<IDataService, DataService>();
         services.AddSingleton<IDataStorageRepository, DataStorageRepository>();
         services.AddSingleton<IHttpService, HttpService>();
+        services.AddSingleton<IServerDetails, ServerDetails>();
+        services.AddSingleton<IStorageStatus, StorageStatus>();
         services.AddSingleton(typeof(IGenericRepository<>), typeof(GenericRepository<>));
         services.AddHostedService<BackgroundTask.BackgroundTask>();;
     }

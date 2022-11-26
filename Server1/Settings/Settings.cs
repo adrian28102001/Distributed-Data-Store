@@ -23,4 +23,5 @@ public static class Settings
     // public static readonly string PartitionLeader = $"https://localhost:{7112}"; //local
     // public static readonly string Server1 = $"https://localhost:{7173}"; //local
     // public static readonly string Server2 = $"https://localhost:{7156}"; //local
+    public const int Id = 1;
 }

@@ -1,4 +1,5 @@
-using Server2;
+using Server1;
+using Server1.Settings;
 
 var builder = WebApplication.CreateBuilder(args);
 

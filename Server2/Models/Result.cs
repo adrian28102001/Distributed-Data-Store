@@ -1,4 +1,4 @@
-﻿namespace PartitionLeader.Models;
+﻿namespace Server1.Models;
 
 public class Result
 {
@@ -9,10 +9,4 @@ public class Result
     public int Port { get; set; }
 
     public ServerName ServerName { get; set; }
-
-    public Result()
-    {
-        StorageCount = 0;
-        LastProcessedId = 0;
-    }
 }

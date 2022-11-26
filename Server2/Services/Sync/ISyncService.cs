@@ -1,4 +1,4 @@
-﻿namespace Server2.Services;
+﻿namespace Server1.Services.Sync;
 
 public interface ISyncService
 {

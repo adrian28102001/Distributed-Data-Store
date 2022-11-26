@@ -1,8 +1,8 @@
 ﻿using Newtonsoft.Json;
-using PartitionLeader.Helpers;
-using PartitionLeader.Models;
+using Server1.Helpers;
+using Server1.Models;
 
-namespace PartitionLeader.Services.HttpService;
+namespace Server1.Services.HttpService;
 
 public static class GenericHttp
 {
@@ -12,12 +12,12 @@ public static class GenericHttp
         {
             var deserialized = await GetObject(url);
 
-            ConsoleHelper.Print($"Got data from url {url}", ConsoleColor.Green);
+            PrintConsole.Write($"Got data from url {url}", ConsoleColor.Green);
             return deserialized;
         }
         catch (Exception e)
         {
-            ConsoleHelper.Print($"Failed get from {url}", ConsoleColor.DarkRed);
+            PrintConsole.Write($"Failed get from {url}", ConsoleColor.DarkRed);
         }
 
         return null;
@@ -29,12 +29,12 @@ public static class GenericHttp
         {
             var deserialized = await GetObject(url);
 
-            ConsoleHelper.Print($"Got data from url {url} for id: {id}", ConsoleColor.Green);
+            PrintConsole.Write($"Got data from url {url} for id: {id}", ConsoleColor.Green);
             return deserialized;
         }
         catch (Exception e)
         {
-            ConsoleHelper.Print($"Failed get from {url}for id: {id}", ConsoleColor.DarkRed);
+            PrintConsole.Write($"Failed get from {url}for id: {id}", ConsoleColor.DarkRed);
         }
 
         return null;

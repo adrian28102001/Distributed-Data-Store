@@ -18,6 +18,14 @@ public class ServerController : ControllerBase
         _dataService = dataService;
     }
 
+    [HttpGet]
+    public Task<KeyValuePair<int, int>> GetStorageDetails()
+    {
+        const int serverId = Settings.Settings.Id;
+        var serverSize = _dataService.GetAll().Result.Count;
+        return Task.FromResult(new KeyValuePair<int, int>(serverId, serverSize));
+    }
+
     [HttpGet("/get/{id}")]
     public async Task<KeyValuePair<int, Data>?> GetById([FromRoute] int id)
     {
@@ -39,18 +47,16 @@ public class ServerController : ControllerBase
     [HttpPost]
     public async Task<Result> Save([FromBody] Data data)
     {
-        var result = await _dataService.Save(data);
-        
-        // result.UpdateStatus();
-        return new Result()
+        await _dataService.Save(data);
+        return new Result
         {
-            Port = 123,
+            Port = Settings.Settings.Port,
             ServerName = ServerName.Server1,
             StorageCount = _dataService.GetAll().Result.Count,
             LastProcessedId = data.Id
         };
     }
-  
+
 
     [HttpDelete("/delete/{id}")]
     public async Task<Result> Delete([FromRoute] int id)
