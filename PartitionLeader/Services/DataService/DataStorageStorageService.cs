@@ -1,29 +1,31 @@
-﻿using PartitionLeader.Models;
+﻿using PartitionLeader.Helpers;
+using PartitionLeader.Models;
 using PartitionLeader.Repositories.DataStorage;
 
 namespace PartitionLeader.Services.DataService;
 
-public class DataService : IDataService
+public class DataStorageStorageService : IDataStorageService
 {
     private readonly IDataStorageRepository _dataStorageRepository;
 
-    public DataService(IDataStorageRepository dataStorageRepository)
+    public DataStorageStorageService(IDataStorageRepository dataStorageRepository)
     {
         _dataStorageRepository = dataStorageRepository;
     }
 
-    public KeyValuePair<int, Data> GetById(int id)
+    public async Task<KeyValuePair<int, Data>?> GetById(int id)
     {
-        return _dataStorageRepository.GetById(id);
+        return await _dataStorageRepository.GetById(id);
     }
 
-    public IDictionary<int, Data> GetAll()
+    public async Task<IDictionary<int, Data>?> GetAll()
     {
-        return _dataStorageRepository.GetAll();
+        return await _dataStorageRepository.GetAll();
     }
 
-    public async Task<Result> Save(int id, Data data)
+    public async Task<Result> Save(Data data)
     {
+        var id = IdGenerator.GenerateId();
         return await _dataStorageRepository.Save(id, data);
     }
 

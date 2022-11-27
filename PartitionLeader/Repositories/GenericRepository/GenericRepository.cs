@@ -11,9 +11,14 @@ public class GenericRepository<T> : IGenericRepository<T> where T : Entity
         _storage = storage;
     }
 
-    public KeyValuePair<int, T> GetById(int id)
+    public Task<IDictionary<int, T>> GetAll()
     {
-        return _storage.FirstOrDefault(s => s.Key == id);
+        return Task.FromResult(_storage);
+    }
+
+    public Task<KeyValuePair<int, T>> GetById(int id)
+    {
+        return Task.FromResult(_storage.FirstOrDefault(s => s.Key == id));
     }
     
     public Task<Result> Save(int id, T entity)

@@ -7,6 +7,28 @@ namespace PartitionLeader.Services.HttpService;
 
 public class HttpService : IHttpService
 {
+    public async Task<IDictionary<int, Data>?> GetAll(string url)
+    {
+        try
+        {
+            using var client = new HttpClient();
+
+            var response = await client.GetAsync($"{url}/all");
+            
+            var dataAsJson = await response.Content.ReadAsStringAsync();
+            var deserialized = JsonConvert.DeserializeObject<IDictionary<int, Data>>(dataAsJson);
+            
+            ConsoleHelper.Print($"Got data from url {url}", ConsoleColor.Green);
+            return deserialized;
+        }
+        catch (Exception e)
+        {
+            ConsoleHelper.Print($"Failed get from {url}", ConsoleColor.DarkRed);
+        }
+
+        return null;
+    }
+
     public async Task<KeyValuePair<int, Data>?> GetById(int id, string url)
     {
         try

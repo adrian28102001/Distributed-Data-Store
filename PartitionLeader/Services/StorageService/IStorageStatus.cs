@@ -1,4 +1,4 @@
-﻿namespace PartitionLeader.Services;
+﻿namespace PartitionLeader.Services.StorageService;
 
 public interface IStorageStatus
 {

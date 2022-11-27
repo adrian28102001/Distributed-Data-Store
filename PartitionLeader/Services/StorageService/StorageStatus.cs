@@ -1,8 +1,9 @@
 ﻿using PartitionLeader.Helpers;
 using PartitionLeader.Models;
 using PartitionLeader.Services.ServersDetails;
+using PartitionLeader.Setting;
 
-namespace PartitionLeader.Services;
+namespace PartitionLeader.Services.StorageService;
 
 public class StorageStatus : IStorageStatus
 {
@@ -12,8 +13,8 @@ public class StorageStatus : IStorageStatus
     {
         StorageCount = 0,
         LastProcessedId = 0,
-        Port = Settings.Settings.Port,
-        ServerName = Settings.Settings.ServerName
+        Port = Settings.ThisPort,
+        ServerName = Settings.ServerName
     };
 
     private Result _server1Status = new()
@@ -38,7 +39,7 @@ public class StorageStatus : IStorageStatus
         var serverDetails = _serverDetails.GetServersCapacity();
         var optimalServer = serverDetails.MinBy(pair => pair.Value);
 
-        var url = Settings.Settings.GetUrlByServerId(optimalServer.Key);
+        var url = Settings.GetUrlByServerId(optimalServer.Key);
         ConsoleHelper.Print($"Best server is {url}", ConsoleColor.Yellow);
         
         return url;

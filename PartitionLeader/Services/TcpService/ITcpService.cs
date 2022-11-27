@@ -4,5 +4,5 @@ namespace PartitionLeader.Services.TcpService;
 
 public interface ITcpService
 {
-    public string TcpSave(Data data);
+    public Result? TcpSave(Data data, int serverPort);
 }

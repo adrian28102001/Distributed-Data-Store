@@ -14,12 +14,12 @@ public class DataStorageRepository : IDataStorageRepository
         _genericRepository = new GenericRepository<Data>(_storage);
     }
     
-    public IDictionary<int, Data> GetAll()
+    public Task<IDictionary<int, Data>> GetAll()
     {
-        return _storage;
+        return Task.FromResult(_storage);
     }
 
-    public KeyValuePair<int, Data> GetById(int id)
+    public Task<KeyValuePair<int, Data>> GetById(int id)
     {
         return _genericRepository.GetById(id);
     }
@@ -39,8 +39,9 @@ public class DataStorageRepository : IDataStorageRepository
         return await _genericRepository.Delete(id);
     }
 
-    public Task<bool> DoesKeyExist(int id)
+    public async Task<bool> DoesKeyExist(int id)
     {
-        return Task.FromResult(GetAll().ContainsKey(id));
+        var dictionary = await _genericRepository.GetAll();
+        return await Task.FromResult(dictionary.ContainsKey(id));
     }
 }

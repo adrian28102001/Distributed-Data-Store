@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using PartitionLeader.Setting;
 using RestSharp;
 
 namespace PartitionLeader.Services.ServersDetails;
@@ -15,8 +16,8 @@ public class ServerDetails : IServerDetails
     [HttpGet]
     public IDictionary<int, int> GetServersCapacity()
     {
-        var client1 = new RestClient(Settings.Settings.Server1);
-        var client2 = new RestClient(Settings.Settings.Server2);
+        var client1 = new RestClient(Settings.Server1);
+        var client2 = new RestClient(Settings.Server2);
 
         var response1 = client1.Execute<KeyValuePair<int, int>>(new RestRequest());
         var response2 = client2.Execute<KeyValuePair<int, int>>(new RestRequest());

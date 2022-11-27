@@ -4,6 +4,7 @@ using PartitionLeader.Services;
 using PartitionLeader.Services.DataService;
 using PartitionLeader.Services.HttpService;
 using PartitionLeader.Services.ServersDetails;
+using PartitionLeader.Services.StorageService;
 using PartitionLeader.Services.Sync;
 using PartitionLeader.Services.TcpService;
 
@@ -21,7 +22,7 @@ public class Startup
         services.AddLogging(config => config.ClearProviders());
         
         services.AddSingleton<ISyncService, SyncService>();
-        services.AddSingleton<IDataService, DataService>();
+        services.AddSingleton<IDataStorageService, DataStorageStorageService>();
         services.AddSingleton<IDataStorageRepository, DataStorageRepository>();
         services.AddSingleton<IHttpService, HttpService>();
         services.AddSingleton<ITcpService, TcpService>();
