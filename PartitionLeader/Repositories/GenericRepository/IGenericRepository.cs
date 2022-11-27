@@ -2,7 +2,7 @@
 
 namespace PartitionLeader.Repositories.GenericRepository;
 
-public interface IGenericRepository <T> where T : IData
+public interface IGenericRepository <T> where T : Entity
 {
     public KeyValuePair<int, T> GetById(int id);
     public Task<Result> Save(int id, T entity);

@@ -2,7 +2,7 @@
 
 namespace PartitionLeader.Repositories.GenericRepository;
 
-public class GenericRepository<T> : IGenericRepository<T> where T : IData
+public class GenericRepository<T> : IGenericRepository<T> where T : Entity
 {
     private readonly IDictionary<int, T> _storage;
 
