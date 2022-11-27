@@ -38,7 +38,7 @@ public class ServerController : ControllerBase
     public async Task<Result> Save([FromForm] DataModel dataModel)
     {
         var data = dataModel.MapData();
-        var result = await _dataService.Save(data.Id, data);
+        var result = await _dataService.Save(data.Id, data);    
 
         var url = _storageStatus.GetBestServerUrl();
         var server1Result = await _httpService.Save(data, url);

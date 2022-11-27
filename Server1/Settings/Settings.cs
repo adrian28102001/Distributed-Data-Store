@@ -11,7 +11,7 @@ public static class Settings
     // public static readonly string ServerIP = "localhost";
     private const string ServerIp = "host.docker.internal";
 
-    public const int Port = 5112;
+    public const int Port = 7173;
 
     // public static readonly string BaseUrl = $"https://localhost:"; //local
     public const string BaseUrl = $"https://{ServerIp}:";

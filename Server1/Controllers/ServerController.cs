@@ -49,7 +49,7 @@ public class ServerController : ControllerBase
     {
         await _dataService.Save(data);
         return new Result
-        {
+        {   
             Port = Settings.Settings.Port,
             ServerName = ServerName.Server1,
             StorageCount = _dataService.GetAll().Result.Count,
