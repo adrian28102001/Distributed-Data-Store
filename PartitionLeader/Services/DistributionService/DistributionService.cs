@@ -20,7 +20,6 @@ public class DistributionService : IDistributionService
         _tcpService = tcpService;
     }
 
-
     public async Task<IDictionary<int, Data>?> GetAll()
     {
         var resultDictionary = await _dataService.GetAll();

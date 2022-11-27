@@ -21,7 +21,7 @@ public class TcpService : ITcpService
         Console.WriteLine("Server starting !");
 
         var ipAddress = IPAddress.Loopback;
-        const int port = Settings.Settings.TcpPort;
+        int port = Settings.Settings.TcpPort;
         var ipEndPoint = new IPEndPoint(ipAddress, port);
         var listener = new TcpListener(ipEndPoint);
         listener.Start();

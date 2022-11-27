@@ -18,14 +18,6 @@ public class ServerController : ControllerBase
         _dataService = dataService;
     }
 
-    [HttpGet]
-    public Task<KeyValuePair<int, int>> GetStorageDetails()
-    {
-        const int serverId = Settings.Settings.Id;
-        var serverSize = _dataService.GetAll().Result.Count;
-        return Task.FromResult(new KeyValuePair<int, int>(serverId, serverSize));
-    }
-
     [HttpGet("/get/{id}")]
     public async Task<KeyValuePair<int, Data>?> GetById([FromRoute] int id)
     {

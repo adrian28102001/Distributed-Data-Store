@@ -11,10 +11,11 @@ public class TcpService : ITcpService
     {
         var requestMessage = JsonConvert.SerializeObject(data);
         var responseMessage = SendMessage(requestMessage, serverPort);
+
         var deserialized = JsonConvert.DeserializeObject<Result>(responseMessage);
 
         Console.WriteLine(responseMessage);
-        
+
         return deserialized;
     }
 

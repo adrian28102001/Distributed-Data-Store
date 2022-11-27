@@ -30,10 +30,12 @@ public static class StreamConverter
         string result = null!;
 
         foreach (var c in message)
+        {
             if (c != '\0')
             {
                 result += c;
             }
+        }
 
         return result;
     }
