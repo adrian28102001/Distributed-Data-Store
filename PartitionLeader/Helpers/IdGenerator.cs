@@ -3,7 +3,7 @@
 public static class IdGenerator
 {
     private static readonly Mutex Mutex = new();
-    private static int _id = 0;
+    private static int _id;
 
     public static int GenerateId()
     {

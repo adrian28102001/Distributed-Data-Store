@@ -4,6 +4,7 @@ using PartitionLeader.Models;
 using PartitionLeader.Services;
 using PartitionLeader.Services.DataService;
 using PartitionLeader.Services.HttpService;
+using PartitionLeader.Services.TcpService;
 
 namespace PartitionLeader.Controllers;
 
@@ -14,12 +15,14 @@ public class ServerController : ControllerBase
     private readonly IDataService _dataService;
     private readonly IHttpService _httpService;
     private readonly IStorageStatus _storageStatus;
-
-    public ServerController(IDataService dataService, IHttpService httpService, IStorageStatus storageStatus)
+    private readonly ITcpService _tcpService;
+    
+    public ServerController(IDataService dataService, IHttpService httpService, IStorageStatus storageStatus, ITcpService tcpService)
     {
         _dataService = dataService;
         _httpService = httpService;
         _storageStatus = storageStatus;
+        _tcpService = tcpService;
     }
 
     [HttpGet("/all")]
@@ -41,8 +44,10 @@ public class ServerController : ControllerBase
         var result = await _dataService.Save(data.Id, data);    
 
         var url = _storageStatus.GetBestServerUrl();
-        var server1Result = await _httpService.Save(data, url);
-
+        
+        var server1Result = await _httpService.Save(data, url); //Http
+        var tcpSend = _tcpService.TcpSave(data); //Tcp
+        
         return result;
     }
 

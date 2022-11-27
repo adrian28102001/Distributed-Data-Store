@@ -6,12 +6,11 @@ public static class Settings
 {
     public const ServerName ServerName = Models.ServerName.PartitionLeader;
 
-    public const string ServerIp = "localhost";
+    private const bool InDocker = false; // set to false when running on localhost
 
-    // private const string ServerIp = "host.docker.internal";
-    // public const string BaseUrl = $"https://{ServerIp}:";
+    private const string ServerIp = InDocker ? "host.docker.internal" : "localhost";
 
-    public const int TcpPort = 7173;
+    public const int TcpPort = 8081;
     public const int Port = 7112;
 
     public static readonly string BaseUrl = $"https://localhost:"; //local

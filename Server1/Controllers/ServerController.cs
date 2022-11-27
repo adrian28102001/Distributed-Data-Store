@@ -50,7 +50,7 @@ public class ServerController : ControllerBase
         await _dataService.Save(data);
         return new Result
         {   
-            Port = Settings.Settings.Port,
+            Port = 123,
             ServerName = ServerName.Server1,
             StorageCount = _dataService.GetAll().Result.Count,
             LastProcessedId = data.Id

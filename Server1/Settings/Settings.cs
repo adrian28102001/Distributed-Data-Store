@@ -6,22 +6,25 @@ public static class Settings
 {
     public static readonly ServerName ServerName = ServerName.PartitionLeader;
 
-    public static readonly bool Leader = true;
+    public static readonly bool Leader = false;
+    public const int TcpPort = 8081;
 
-    // public static readonly string ServerIP = "localhost";
-    private const string ServerIp = "host.docker.internal";
+    public const bool InDocker = true; // set to false when running on localhost
 
-    public const int Port = 7173;
+    public const string ServerIp = InDocker ? "host.docker.internal" : "localhost";
 
-    // public static readonly string BaseUrl = $"https://localhost:"; //local
-    public const string BaseUrl = $"https://{ServerIp}:";
-    public static readonly string ThisServerUrl = $"https://{ServerIp}:{Port}"; //docker
-    public static readonly string PartitionLeader = $"https://{ServerIp}:{7112}"; //local
-    public static readonly string Server1 = $"https://{ServerIp}:{7173}"; //local
-    public static readonly string Server2 = $"https://{ServerIp}:{7156}"; //local
+    public const int LeaderPort = InDocker ? 5112 : 7112;
+    public const int Server1Port = InDocker ? 5173 : 7173;
+    public const int Server2Port = InDocker ? 5156 : 7156;
     
-    // public static readonly string PartitionLeader = $"https://localhost:{7112}"; //local
-    // public static readonly string Server1 = $"https://localhost:{7173}"; //local
-    // public static readonly string Server2 = $"https://localhost:{7156}"; //local
+    public const int ThisPort = Server1Port;
+    
+    public const string BaseUrl = $"https://{ServerIp}:"; //local
+
+    public static readonly string ThisServerUrl = $"https://{ServerIp}:{ThisPort}"; //docker
+
+    public static readonly string PartitionLeader = $"https://{ServerIp}:{LeaderPort}"; //local
+    public static readonly string Server1 = $"https://{ServerIp}:{Server1Port}"; //local
+    public static readonly string Server2 = $"https://{ServerIp}:{Server2Port}"; //local
     public const int Id = 1;
 }

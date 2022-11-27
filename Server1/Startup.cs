@@ -4,6 +4,7 @@ using Server1.Repositories.GenericRepository;
 using Server1.Services;
 using Server1.Services.DataService;
 using Server1.Services.Sync;
+using Server1.Services.TcpService;
 
 namespace Server1;
 
@@ -21,6 +22,7 @@ public class Startup
 
         services.AddSingleton<ISyncService, SyncService>();
         services.AddSingleton<IDataService, DataService>();
+        services.AddSingleton<ITcpService, TcpService>();
         services.AddSingleton<IDataStorageRepository, DataStorageRepository>();
         // services.AddSingleton<IHttpService, HttpService>();
         services.AddSingleton(typeof(IGenericRepository<>), typeof(GenericRepository<>));

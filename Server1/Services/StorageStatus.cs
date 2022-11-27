@@ -10,7 +10,7 @@ public static class StorageStatus
     {
         StorageCount = 0,
         LastProcessedId = 0,
-        Port = Settings.Settings.Port,
+        Port = Settings.Settings.ThisPort,
         ServerName = Settings.Settings.ServerName
     };
 
