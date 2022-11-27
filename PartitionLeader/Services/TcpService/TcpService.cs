@@ -11,7 +11,6 @@ public class TcpService : ITcpService
     {
         var requestMessage = JsonConvert.SerializeObject(data);
         var responseMessage = SendMessage(requestMessage, serverPort);
-        
         var deserialized = JsonConvert.DeserializeObject<Result>(responseMessage);
 
         Console.WriteLine(responseMessage);
@@ -19,8 +18,7 @@ public class TcpService : ITcpService
         return deserialized;
     }
 
-
-    private static string SendMessage(string message, int serverPort)
+    private string SendMessage(string message, int serverPort)
     {
         var response = "";
         try

@@ -3,12 +3,20 @@ using System.Net.Sockets;
 using Newtonsoft.Json;
 using Server1.Helpers;
 using Server1.Models;
+using Server1.Services.DataService;
 
 namespace Server1.Services.TcpService;
 
 public class TcpService : ITcpService
 {
-    public void RunTcp()
+    private readonly IDataService _dataService;
+
+    public TcpService(IDataService dataService)
+    {
+        _dataService = dataService;
+    }
+
+    public async Task RunTcp()
     {
         Console.WriteLine("Server starting !");
 
@@ -22,11 +30,11 @@ public class TcpService : ITcpService
 
         while (true)
         {
-            var sender = listener.AcceptTcpClient();
+            var sender = await listener.AcceptTcpClientAsync();
             var request = StreamConverter.StreamToMessage(sender.GetStream());
             if (request != null)
             {
-                var responseMessage = MessageHandler(request);
+                var responseMessage = await MessageHandler(request);
                 SendMessage(responseMessage, sender);
             }
             else
@@ -36,12 +44,16 @@ public class TcpService : ITcpService
         }
     }
 
-    private static string MessageHandler(string message)
+    private async Task<string> MessageHandler(string message)
     {
         Console.WriteLine("Received message: " + message);
         var deserialized = JsonConvert.DeserializeObject<Data>(message);
-        Console.WriteLine(deserialized?.FileName);
-        return "Success";
+        var resultSummary = await _dataService.Save(deserialized);
+
+        var serializeObject = JsonConvert.SerializeObject(resultSummary);
+        Console.WriteLine(deserialized.FileName);
+
+        return serializeObject;
     }
 
     private static void SendMessage(string message, TcpClient client)

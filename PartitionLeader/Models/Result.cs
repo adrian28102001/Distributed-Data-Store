@@ -12,7 +12,6 @@ public class Result
 
     public Result()
     {
-        StorageCount = 0;
-        LastProcessedId = 0;
+        StorageCount = Setting.Settings.ThisPort;
     }
 }

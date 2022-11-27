@@ -2,6 +2,7 @@
 using PartitionLeader.Repositories.GenericRepository;
 using PartitionLeader.Services;
 using PartitionLeader.Services.DataService;
+using PartitionLeader.Services.DistributionService;
 using PartitionLeader.Services.HttpService;
 using PartitionLeader.Services.ServersDetails;
 using PartitionLeader.Services.StorageService;
@@ -20,15 +21,20 @@ public class Startup
         services.AddEndpointsApiExplorer();
         services.AddSwaggerGen();
         services.AddLogging(config => config.ClearProviders());
-        
+
+        services.AddSingleton<IDataStorageRepository, DataStorageRepository>();
+        services.AddSingleton(typeof(IGenericRepository<>), typeof(GenericRepository<>));
+
         services.AddSingleton<ISyncService, SyncService>();
         services.AddSingleton<IDataStorageService, DataStorageStorageService>();
-        services.AddSingleton<IDataStorageRepository, DataStorageRepository>();
+        services.AddSingleton<IDistributionService, DistributionService>();
+
         services.AddSingleton<IHttpService, HttpService>();
         services.AddSingleton<ITcpService, TcpService>();
+
         services.AddSingleton<IServerDetails, ServerDetails>();
         services.AddSingleton<IStorageStatus, StorageStatus>();
-        services.AddSingleton(typeof(IGenericRepository<>), typeof(GenericRepository<>));
+
         services.AddHostedService<BackgroundTask.BackgroundTask>();;
     }
 

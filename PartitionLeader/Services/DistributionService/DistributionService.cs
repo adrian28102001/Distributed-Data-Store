@@ -73,15 +73,6 @@ public class DistributionService : IDistributionService
         return data;
     }
 
-    public async Task<Data> Update(int id, Data data)
-    {
-        //update try update all servers
-        var server1Data = await _httpService.Update(id, data, Settings.Server1);
-        var server2Data = await _httpService.Update(id, data, Settings.Server2);
-
-        return await _dataService.Update(id, data);
-    }
-
     public async Task<IList<Result>> Save(Data data)
     {
         var results = new List<Result>();
@@ -96,7 +87,6 @@ public class DistributionService : IDistributionService
             results.Add(result);
         }
 
-        //use tcp to save data to other servers
         if (optimalServerNames.Contains(ServerName.Server1))
         {
             var server1Response = _tcpService.TcpSave(data, Settings.Server1TcpSavePort);
@@ -118,6 +108,15 @@ public class DistributionService : IDistributionService
         }
 
         return results;
+    }
+
+    public async Task<Data> Update(int id, Data data)
+    {
+        //update try update all servers
+        var server1Data = await _httpService.Update(id, data, Settings.Server1);
+        var server2Data = await _httpService.Update(id, data, Settings.Server2);
+
+        return await _dataService.Update(id, data);
     }
 
     public Task<IList<Result>> Delete(int id)
