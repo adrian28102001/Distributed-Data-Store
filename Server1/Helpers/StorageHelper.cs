@@ -5,11 +5,11 @@ namespace Server1.Helpers;
 
 public static class StorageHelper
 {
-    private static Result _partitionLeaderStatus = new()
+     private static Result _partitionLeaderStatus = new()
     {
         StorageCount = 0,
         LastProcessedId = 0,
-        Port = Settings.LeaderPort,
+        Port = Settings.ThisPort,
         ServerName = Settings.ServerName
     };
 
@@ -52,11 +52,11 @@ public static class StorageHelper
         var optimalServer1 = _partitionLeaderStatus;
         var optimalServer2 = _server1Status;
 
-        if (_server2Status.StorageCount < optimalServer1.StorageCount)
+        if (_server2Status.StorageCount < optimalServer2.StorageCount)
         {
             optimalServer1 = _server2Status;
         }
-        else if (_server2Status.StorageCount < optimalServer2.StorageCount)
+        else if (_server2Status.StorageCount < optimalServer1.StorageCount)
         {
             optimalServer2 = _server2Status;
         }
@@ -69,37 +69,34 @@ public static class StorageHelper
 
     public static void UpdateServerStatus(this Result? summary)
     {
-        if (summary == null) return;
-        
-        switch (summary.ServerName)
+        if (summary != null)
         {
-            case ServerName.PartitionLeader:
-                _partitionLeaderStatus = summary;
-                break;
-            case ServerName.Server1:
-                _server1Status = summary;
-                break;
-            case ServerName.Server2:
-                _server2Status = summary;
-                break;
-            default:
-                throw new ArgumentOutOfRangeException();
+            switch (summary.ServerName)
+            {
+                case ServerName.PartitionLeader:
+                    _partitionLeaderStatus = summary;
+                    break;
+                case ServerName.Server1:
+                    _server1Status = summary;
+                    break;
+                case ServerName.Server2:
+                    _server2Status = summary;
+                    break;
+            }
         }
     }
 
-    public static Result GetStatus()
+    public static Result? GetStatus()
     {
         return _partitionLeaderStatus;
     }
-    
+
     public static IList<Result>? GetStatusFromServers()
     {
-        var statuses = new List<Result>
-        {
-            _server1Status,
-            _server2Status,
-            _partitionLeaderStatus
-        };
+        var statuses = new List<Result>();
+        statuses.Add(_server1Status);
+        statuses.Add(_server2Status);
+        statuses.Add(_partitionLeaderStatus);
         return statuses;
     }
 }
