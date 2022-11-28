@@ -22,10 +22,10 @@ public static class StreamConverter
     public static string StreamToMessage(Stream stream)
     {
         var sizeBytes = new byte[4];
-        stream.ReadAsync(sizeBytes, 0, 4);
+        stream.Read(sizeBytes, 0, 4);
         var messageSize = BitConverter.ToInt32(sizeBytes, 0);
         var messageBytes = new byte[messageSize];
-        stream.ReadAsync(messageBytes, 0, messageSize);
+        stream.Read(messageBytes, 0, messageSize);
         var message = Encoding.GetString(messageBytes);
         string result = null!;
 
