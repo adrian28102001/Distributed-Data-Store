@@ -58,7 +58,7 @@ public class HttpService : IHttpService
     {
         try
         {
-            var json = JsonConvert.SerializeObject(id);
+            var json = JsonConvert.SerializeObject(data);
             var content = new StringContent(json, Encoding.UTF8, "application/json");
 
             using var client = new HttpClient();
@@ -105,17 +105,17 @@ public class HttpService : IHttpService
         return null;
     }
 
-    public async Task<Result> Delete(int id, string url)
+    public async Task<IList<Result>?> Delete(int id, string url)
     {
         try
         {
             using var client = new HttpClient();
 
             var response = await client.DeleteAsync($"{url}/delete/{id}");
-
+            
             var dataAsJson = await response.Content.ReadAsStringAsync();
-            var deserialized = JsonConvert.DeserializeObject<Result>(dataAsJson);
-
+            var deserialized = JsonConvert.DeserializeObject<IList<Result>>(dataAsJson);
+            
             ConsoleHelper.Print($"Deleted data from url {url} with id: {id}", ConsoleColor.Green);
 
             return deserialized;

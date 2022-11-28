@@ -22,22 +22,28 @@ public class ServerController : ControllerBase
         _distributionService = distributionService;
     }
 
-    [HttpGet("/get/{id}")]
-    public async Task<KeyValuePair<int, Data>?> GetById([FromRoute] int id)
+    [HttpGet("/check")]
+    public Task<bool> CheckStatus()
     {
-        return await _distributionService.GetById(id);
+        return Task.FromResult(true);
     }
-
+    
     [HttpGet("/all")]
     public async Task<IDictionary<int, Data>?> GetAll()
     {
         return await _distributionService.GetAll();
     }
 
-    [HttpGet("/summary")]
-    public async Task<Result?> GetSummary()
+    [HttpGet("/get/{id}")]
+    public async Task<KeyValuePair<int, Data>?> GetById([FromRoute] int id)
     {
-        return await Task.FromResult(StorageHelper.GetStatus());
+        return await _distributionService.GetById(id);
+    }
+
+    [HttpGet("/summary")]
+    public async Task<IList<Result>?> GetSummary()
+    {
+        return await Task.FromResult(StorageHelper.GetStatusFromServers());
     }
 
     [HttpPut("/update/{id}")]

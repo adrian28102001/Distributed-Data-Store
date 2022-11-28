@@ -1,4 +1,6 @@
-﻿using PartitionLeader.Helpers;
+﻿using System.Text;
+using Newtonsoft.Json;
+using PartitionLeader.Helpers;
 using PartitionLeader.Models;
 using PartitionLeader.Services.DataService;
 using PartitionLeader.Services.HttpService;
@@ -24,7 +26,6 @@ public class DistributionService : IDistributionService
     {
         var resultDictionary = await _dataService.GetAll();
 
-        //try to get from server 1 if not get from server 2
         var server1Data = await _httpService.GetAll(Settings.Server1);
 
         if (resultDictionary != null && server1Data != null)
@@ -37,7 +38,7 @@ public class DistributionService : IDistributionService
                 }
             }
         }
-        else if(resultDictionary != null)
+        else if (resultDictionary != null)
         {
             var server2Data = await _httpService.GetAll(Settings.Server2);
 
@@ -111,15 +112,39 @@ public class DistributionService : IDistributionService
 
     public async Task<Data> Update(int id, Data data)
     {
-        //update try update all servers
-        var server1Data = await _httpService.Update(id, data, Settings.Server1);
-        var server2Data = await _httpService.Update(id, data, Settings.Server2);
+        await _httpService.Update(id, data, Settings.Server1);
+        await _httpService.Update(id, data, Settings.Server2);
 
         return await _dataService.Update(id, data);
     }
 
-    public Task<IList<Result>> Delete(int id)
+    public async Task<IList<Result>> Delete(int id)
     {
-        throw new NotImplementedException();
+        var results = new List<Result>();
+        var result = await _dataService.Delete(id);
+        result.UpdateServerStatus();
+
+        var server1Result = await _httpService.Delete(id, Settings.Server1);
+        var server2Result = await _httpService.Delete(id, Settings.Server2);
+
+        if (server1Result != null)
+        {
+            foreach (var resultSummary in server1Result)
+            {
+                resultSummary.UpdateServerStatus();
+                results.Add(resultSummary);
+            }
+        }
+
+        if (server2Result != null)
+        {
+            foreach (var resultSummary in server2Result)
+            {
+                resultSummary.UpdateServerStatus();
+                results.Add(resultSummary);
+            }
+        }
+
+        return results;
     }
 }
