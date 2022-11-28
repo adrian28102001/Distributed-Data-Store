@@ -18,16 +18,17 @@ public class HttpService : IHttpService
             var dataAsJson = await response.Content.ReadAsStringAsync();
             var deserialized = JsonConvert.DeserializeObject<IDictionary<int, Data>>(dataAsJson);
             
-            ConsoleHelper.Print($"Got data from url {url}", ConsoleColor.Green);
+           ConsoleHelper.Print($"Got data from url {url}", ConsoleColor.Green);
             return deserialized;
         }
         catch (Exception e)
         {
-            ConsoleHelper.Print($"Failed get from {url}", ConsoleColor.DarkRed);
+           ConsoleHelper.Print($"Failed get from {url}", ConsoleColor.DarkRed);
         }
 
         return null;
     }
+
 
     public async Task<KeyValuePair<int, Data>?> GetById(int id, string url)
     {

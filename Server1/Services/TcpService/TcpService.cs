@@ -18,7 +18,7 @@ public class TcpService : ITcpService
     }
 
     #region Run Server 8081
-    public async Task Run()
+    public async Task RunTcp()
     {
         Console.WriteLine("Server starting !");
  
