@@ -20,9 +20,9 @@ public class ServerController : ControllerBase
 
 
     [HttpGet("/summary")]
-    public async Task<IList<Result>?> GetSummary()
+    public async Task<Result?> GetSummary()
     {
-        return await Task.FromResult(StorageHelper.GetStatusFromServers());
+        return await Task.FromResult(StorageHelper.GetStatus());
     }
 
     [HttpGet("/all")]

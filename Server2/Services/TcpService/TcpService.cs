@@ -64,7 +64,6 @@ public class TcpService : ITcpService
     
     private void SendMessage(string message, TcpClient client)
     {
-        // messageToByteArray- discussed later
         var bytes = StreamConverter.MessageToByteArray(message);
         client.GetStream().Write(bytes, 0, bytes.Length);
     }
