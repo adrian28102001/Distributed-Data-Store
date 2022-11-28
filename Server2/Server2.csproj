@@ -17,6 +17,8 @@
     <ItemGroup>
       <_ContentIncludedByDefault Remove="Settings\appsettings.Development.json" />
       <_ContentIncludedByDefault Remove="Settings\appsettings.json" />
+      <_ContentIncludedByDefault Remove="Setting\appsettings.Development.json" />
+      <_ContentIncludedByDefault Remove="Setting\appsettings.json" />
     </ItemGroup>
 
 </Project>

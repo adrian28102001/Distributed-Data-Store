@@ -10,14 +10,14 @@ namespace Server2.Services.TcpService;
 
 public class TcpService : ITcpService
 {
-    private readonly IDataStorageService _dataService;
+     private readonly IDataStorageService _dataService;
 
     public TcpService(IDataStorageService dataService)
     {
         _dataService = dataService;
     }
 
-    #region Run Server 8082
+    #region Run Server 8081
     public async Task RunTcp()
     {
         Console.WriteLine("Server starting !");
@@ -25,7 +25,7 @@ public class TcpService : ITcpService
         // IP Address to listen on. Loopback in this case
         var ipAddr = IPAddress.Loopback;
         // Port to listen on
-        var port = Settings.Server2TcpSavePort;
+        var port = Settings.Server1TcpSavePort;
         // Create a network endpoint
         var ep = new IPEndPoint(ipAddr, port);
         // Create and start a TCP listener
@@ -69,7 +69,8 @@ public class TcpService : ITcpService
     }
     #endregion
 
-    //SaveTo 8081 Server 1
+    #region SaveTo 8082 Server 2
+
     public Result? TcpSave(Data data, int serverPort)
     {
         var requestMessage = JsonConvert.SerializeObject(data);
@@ -109,4 +110,5 @@ public class TcpService : ITcpService
         return response;
     }
     
+    #endregion
 }

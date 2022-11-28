@@ -1,5 +1,4 @@
-﻿using Server2.Services.Sync;
-using Server2.Services.TcpService;
+﻿using Server2.Services.TcpService;
 
 namespace Server2.BackgroundTask;
 

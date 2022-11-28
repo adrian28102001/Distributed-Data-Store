@@ -2,6 +2,7 @@
 using Server2.Repositories.GenericRepository;
 using Server2.Services.DataService;
 using Server2.Services.DistributionService;
+using Server2.Services.HealthService;
 using Server2.Services.HttpService;
 using Server2.Services.Sync;
 using Server2.Services.TcpService;
@@ -28,6 +29,7 @@ public class Startup
         services.AddSingleton<IDistributionService, DistributionService>();
 
         services.AddSingleton<IHttpService, HttpService>();
+        services.AddSingleton<IHealthService, HealthService>();
         services.AddSingleton<ITcpService, TcpService>();
 
         services.AddHostedService<BackgroundTask.BackgroundTask>();

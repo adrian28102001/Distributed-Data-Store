@@ -5,22 +5,22 @@ namespace Server2.Setting;
 public static class Settings
 {
     public static readonly ServerName ServerName = ServerName.Server1;
-
+    
     public static bool Leader = false;
-
+    
     public static readonly bool InDocker = false; // set to false when running on localhost
-
+    
     public static readonly string ServerIp = InDocker ? "host.docker.internal" : "localhost";
 
     public static readonly int LeaderPort = 7112;
     public static readonly int Server1Port = 7173;
     public static readonly int Server2Port = 7156;
-
+    
     public static readonly int Server1TcpSavePort = 8081;
     public static readonly int Server2TcpSavePort = 8082;
-
+    
     public static readonly int ThisPort = Server1Port;
-
+    
     public static readonly string BaseUrl = $"https://{ServerIp}:"; //local
 
     public static readonly string ThisServerUrl = $"https://{ServerIp}:{ThisPort}"; //docker
