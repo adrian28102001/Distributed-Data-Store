@@ -1,6 +1,6 @@
-﻿using Server1.Models;
+﻿using Server2.Models;
 
-namespace Server1.Helpers.Mappers;
+namespace Server2.Helpers.Mappers;
 
 public static class Map
 {

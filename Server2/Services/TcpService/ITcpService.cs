@@ -1,6 +1,6 @@
-using Server1.Models;
+using Server2.Models;
 
-namespace Server1.Services.TcpService;
+namespace Server2.Services.TcpService;
 
 public interface ITcpService
 {

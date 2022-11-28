@@ -1,6 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
-using RestSharp;
-using Server1.Models;
+﻿using Server1.Models;
+using Server1.Setting;
 
 namespace Server1.Services;
 
@@ -10,8 +9,8 @@ public static class StorageStatus
     {
         StorageCount = 0,
         LastProcessedId = 0,
-        Port = Settings.Settings.ThisPort,
-        ServerName = Settings.Settings.ServerName
+        Port = Settings.ThisPort,
+        ServerName = Settings.ServerName
     };
 
     private static Result _server1Status = new()
@@ -40,7 +39,7 @@ public static class StorageStatus
             optimalServer = _server2Status;
         }
 
-        return $"{Settings.Settings.BaseUrl}{optimalServer.Port}";
+        return $"{Settings.BaseUrl}{optimalServer.Port}";
     }
     
     public static void UpdateStatus(this Result result)

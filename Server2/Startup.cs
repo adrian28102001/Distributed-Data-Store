@@ -1,11 +1,12 @@
-﻿using Server1.Repositories;
-using Server1.Repositories.DataStorage;
-using Server1.Repositories.GenericRepository;
-using Server1.Services;
-using Server1.Services.DataService;
-using Server1.Services.Sync;
+﻿using Server2.Repositories.DataStorage;
+using Server2.Repositories.GenericRepository;
+using Server2.Services.DataService;
+using Server2.Services.DistributionService;
+using Server2.Services.HttpService;
+using Server2.Services.Sync;
+using Server2.Services.TcpService;
 
-namespace Server1;
+namespace Server2;
 
 public class Startup
 {
@@ -19,11 +20,16 @@ public class Startup
         services.AddSwaggerGen();
         services.AddLogging(config => config.ClearProviders());
 
-        services.AddSingleton<ISyncService, SyncService>();
-        services.AddSingleton<IDataService, DataService>();
         services.AddSingleton<IDataStorageRepository, DataStorageRepository>();
-        // services.AddSingleton<IHttpService, HttpService>();
         services.AddSingleton(typeof(IGenericRepository<>), typeof(GenericRepository<>));
+
+        services.AddSingleton<ISyncService, SyncService>();
+        services.AddSingleton<IDataStorageService, DataStorageService>();
+        services.AddSingleton<IDistributionService, DistributionService>();
+
+        services.AddSingleton<IHttpService, HttpService>();
+        services.AddSingleton<ITcpService, TcpService>();
+
         services.AddHostedService<BackgroundTask.BackgroundTask>();
     }
 

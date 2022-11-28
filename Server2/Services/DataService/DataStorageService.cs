@@ -1,14 +1,14 @@
-﻿using PartitionLeader.Helpers;
-using PartitionLeader.Models;
-using PartitionLeader.Repositories.DataStorage;
+﻿using Server2.Helpers;
+using Server2.Models;
+using Server2.Repositories.DataStorage;
 
-namespace PartitionLeader.Services.DataService;
+namespace Server2.Services.DataService;
 
-public class DataStorageStorageService : IDataStorageService
+public class DataStorageService : IDataStorageService
 {
     private readonly IDataStorageRepository _dataStorageRepository;
 
-    public DataStorageStorageService(IDataStorageRepository dataStorageRepository)
+    public DataStorageService(IDataStorageRepository dataStorageRepository)
     {
         _dataStorageRepository = dataStorageRepository;
     }

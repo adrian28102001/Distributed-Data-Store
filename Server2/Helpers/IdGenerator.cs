@@ -1,4 +1,4 @@
-﻿namespace Server1.Helpers;
+﻿namespace Server2.Helpers;
 
 public static class IdGenerator
 {

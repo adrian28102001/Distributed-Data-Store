@@ -1,8 +1,8 @@
-﻿using Server1.Models;
+﻿using Server2.Models;
 
-namespace Server1.Repositories.GenericRepository;
+namespace Server2.Repositories.GenericRepository;
 
-public class GenericRepository<T> : IGenericRepository<T> where T : IData
+public class GenericRepository<T> : IGenericRepository<T> where T : Entity
 {
     private readonly IDictionary<int, T> _storage;
 

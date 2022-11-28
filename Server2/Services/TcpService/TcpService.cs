@@ -1,9 +1,9 @@
 ﻿using System.Net.Sockets;
 using Newtonsoft.Json;
-using Server1.Helpers;
-using Server1.Models;
+using Server2.Helpers;
+using Server2.Models;
 
-namespace Server1.Services.TcpService;
+namespace Server2.Services.TcpService;
 
 public class TcpService : ITcpService
 {

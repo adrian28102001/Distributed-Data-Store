@@ -1,4 +1,4 @@
-﻿namespace Server1.Models;
+﻿namespace Server2.Models;
 
 public class Result
 {

@@ -1,38 +1,130 @@
-﻿using Server1.Models;
+﻿using System.Text;
+using Newtonsoft.Json;
+using Server2.Helpers;
+using Server2.Models;
 
-namespace Server1.Services.HttpService;
+namespace Server2.Services.HttpService;
 
 public class HttpService : IHttpService
 {
     public async Task<IDictionary<int, Data>?> GetAll(string url)
     {
-        var fullUrl = $"{url}/all";
-        var deserialized = await GenericHttp.Get(fullUrl);
-        return deserialized;
+        try
+        {
+            using var client = new HttpClient();
+
+            var response = await client.GetAsync($"{url}/all");
+            
+            var dataAsJson = await response.Content.ReadAsStringAsync();
+            var deserialized = JsonConvert.DeserializeObject<IDictionary<int, Data>>(dataAsJson);
+            
+            ConsoleHelper.Print($"Got data from url {url}", ConsoleColor.Green);
+            return deserialized;
+        }
+        catch (Exception e)
+        {
+            ConsoleHelper.Print($"Failed get from {url}", ConsoleColor.DarkRed);
+        }
+
+        return null;
     }
 
-    public async Task<IDictionary<int, Data>?> GetById(int id, string url)
+    public async Task<KeyValuePair<int, Data>?> GetById(int id, string url)
     {
-        var fullUrl = $"{url}/get/{id}";
-        var deserialized = await GenericHttp.Get(id, fullUrl);
-        return deserialized;
-    }
+        try
+        {
+            var json = JsonConvert.SerializeObject(id);
+            var data = new StringContent(json, Encoding.UTF8, "application/json");
 
+            using var client = new HttpClient();
+
+            var response = await client.GetAsync($"{url}/get/{id}");
+
+            var dataAsJson = await response.Content.ReadAsStringAsync();
+            var deserialized = JsonConvert.DeserializeObject<KeyValuePair<int, Data>>(dataAsJson);
+
+            ConsoleHelper.Print($"Got data from url with id: {id}", ConsoleColor.Green);
+            return deserialized;
+        }
+        catch (Exception e)
+        {
+            ConsoleHelper.Print($"Failed get by id: {id}", ConsoleColor.DarkRed);
+        }
+
+        return null;
+    }
+    
     public async Task<Data?> Update(int id, Data data, string url)
     {
-        var fullUrl = $"{url}/update/{id}";
-        var deserialized = await GenericHttp.Get(id, fullUrl);
+        try
+        {
+            var json = JsonConvert.SerializeObject(data);
+            var content = new StringContent(json, Encoding.UTF8, "application/json");
+
+            using var client = new HttpClient();
+
+            var response = await client.PutAsync($"{url}/update/{id}", content);
+
+            var dataAsJson = await response.Content.ReadAsStringAsync();
+            var deserialized = JsonConvert.DeserializeObject<Data>(dataAsJson);
+
+            ConsoleHelper.Print($"Updated data from url {url}, id: {id}", ConsoleColor.Green);
+            return deserialized;
+        }
+        catch (Exception e)
+        {
+            ConsoleHelper.Print($"Failed to update id: {id} from {url}", ConsoleColor.DarkRed);
+        }
+
         return null;
     }
 
     public async Task<Result?> Save(Data data, string url)
     {
-        var deserialized = await GenericHttp.Get(url);
+        try
+        {
+            var json = JsonConvert.SerializeObject(data);
+            var content = new StringContent(json, Encoding.UTF8, "application/json");
+
+            using var client = new HttpClient();
+
+            var response = await client.PostAsync($"{url}", content);
+
+            var dataAsJson = await response.Content.ReadAsStringAsync();
+            var deserializedResult = JsonConvert.DeserializeObject<Result>(dataAsJson);
+
+            ConsoleHelper.Print($"Saved data to url {url}", ConsoleColor.Green);
+
+            return deserializedResult;
+        }
+        catch (Exception e)
+        {
+            ConsoleHelper.Print($"Failed save to {url}", ConsoleColor.DarkRed);
+        }
+
         return null;
     }
 
-    public Task<Result> Delete(int id, string url)
+    public async Task<IList<Result>?> Delete(int id, string url)
     {
-        throw new NotImplementedException();
+        try
+        {
+            using var client = new HttpClient();
+
+            var response = await client.DeleteAsync($"{url}/delete/{id}");
+            
+            var dataAsJson = await response.Content.ReadAsStringAsync();
+            var deserialized = JsonConvert.DeserializeObject<IList<Result>>(dataAsJson);
+            
+            ConsoleHelper.Print($"Deleted data from url {url} with id: {id}", ConsoleColor.Green);
+
+            return deserialized;
+        }
+        catch (Exception e)
+        {
+            ConsoleHelper.Print($"Failed to delete from {url} id: {id}", ConsoleColor.DarkRed);
+        }
+
+        return null;
     }
 }

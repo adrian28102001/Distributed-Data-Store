@@ -1,7 +1,7 @@
-﻿using Server1.Models;
-using Server1.Repositories.GenericRepository;
+﻿using Server2.Models;
+using Server2.Repositories.GenericRepository;
 
-namespace Server1.Repositories.DataStorage;
+namespace Server2.Repositories.DataStorage;
 
 public class DataStorageRepository : IDataStorageRepository
 {

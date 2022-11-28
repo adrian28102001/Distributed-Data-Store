@@ -1,11 +1,9 @@
 ﻿using PartitionLeader.Repositories.DataStorage;
 using PartitionLeader.Repositories.GenericRepository;
-using PartitionLeader.Services;
 using PartitionLeader.Services.DataService;
 using PartitionLeader.Services.DistributionService;
 using PartitionLeader.Services.HttpService;
 using PartitionLeader.Services.ServersDetails;
-using PartitionLeader.Services.StorageService;
 using PartitionLeader.Services.Sync;
 using PartitionLeader.Services.TcpService;
 
@@ -26,14 +24,13 @@ public class Startup
         services.AddSingleton(typeof(IGenericRepository<>), typeof(GenericRepository<>));
 
         services.AddSingleton<ISyncService, SyncService>();
-        services.AddSingleton<IDataStorageService, DataStorageStorageService>();
+        services.AddSingleton<IDataStorageService, DataStorageService>();
         services.AddSingleton<IDistributionService, DistributionService>();
 
         services.AddSingleton<IHttpService, HttpService>();
         services.AddSingleton<ITcpService, TcpService>();
 
         services.AddSingleton<IServerDetails, ServerDetails>();
-        services.AddSingleton<IStorageStatus, StorageStatus>();
 
         services.AddHostedService<BackgroundTask.BackgroundTask>();;
     }

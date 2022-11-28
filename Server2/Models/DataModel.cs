@@ -1,6 +1,6 @@
-﻿namespace Server1.Models;
+﻿namespace Server2.Models;
 
-public class DataModel : IData
+public class DataModel : Entity
 {
     public IFormFile File { get; set; }
 }

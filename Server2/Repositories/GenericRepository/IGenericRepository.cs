@@ -1,8 +1,8 @@
-﻿using Server1.Models;
+﻿using Server2.Models;
 
-namespace Server1.Repositories.GenericRepository;
+namespace Server2.Repositories.GenericRepository;
 
-public interface IGenericRepository <T> where T : IData
+public interface IGenericRepository <T> where T : Entity
 {
     public Task<KeyValuePair<int, T>> GetById(int id);
     public Task<Result> Save(int id, T entity);

@@ -1,18 +1,14 @@
-﻿using Server1.Services;
-using Server1.Services.Sync;
-using Server1.Services.TcpService;
+﻿using Server1.Services.Sync;
 
 namespace Server1.BackgroundTask;
 
 public class BackgroundTask : BackgroundService
 {
     private readonly IServiceScopeFactory _serviceScopeFactory;
-    private readonly ITcpService _tcpService;
 
-    public BackgroundTask(IServiceScopeFactory serviceScopeFactory, ITcpService tcpService)
+    public BackgroundTask(IServiceScopeFactory serviceScopeFactory) 
     {
         _serviceScopeFactory = serviceScopeFactory;
-        _tcpService = tcpService;
     }
 
     protected override async Task ExecuteAsync(CancellationToken stoppingToken)
@@ -21,7 +17,6 @@ public class BackgroundTask : BackgroundService
         using var scope = _serviceScopeFactory.CreateScope();
         var scoped = scope.ServiceProvider.GetRequiredService<ISyncService>();
        
-        _tcpService.RunTcp();
         scoped.SyncData(stoppingToken);
     }
 }

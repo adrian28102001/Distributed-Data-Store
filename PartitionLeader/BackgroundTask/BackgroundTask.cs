@@ -1,5 +1,4 @@
 ﻿using PartitionLeader.Services.Sync;
-using PartitionLeader.Services.TcpService;
 
 namespace PartitionLeader.BackgroundTask;
 
