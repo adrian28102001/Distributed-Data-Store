@@ -33,6 +33,7 @@ public class Startup
         services.AddSingleton<ITcpService, TcpService>();
 
         services.AddHostedService<BackgroundTask.BackgroundTask>();
+        services.AddHostedService<BackgroundTask.HealthCheck>();
     }
 
     public Startup(IConfiguration configuration)
