@@ -9,7 +9,7 @@ public static class Map
         var fileData = data.File;
         return new Data
         {
-            Id = IdGenerator.GenerateId(),
+            Id = data.Id,
             ContentType = fileData.ContentType,
             FileName = fileData.Name,
             StreamData = ConvertToByte(fileData)

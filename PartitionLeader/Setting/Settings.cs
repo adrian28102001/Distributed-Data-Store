@@ -28,15 +28,4 @@ public static class Settings
     public static readonly string PartitionLeader = $"https://{ServerIp}:{LeaderPort}"; //local
     public static readonly string Server1 = $"https://{ServerIp}:{Server1Port}"; //local
     public static readonly string Server2 = $"https://{ServerIp}:{Server2Port}"; //local
-
-
-    public static string GetUrlByServerId(int id)
-    {
-        return id switch
-        {
-            1 => Server1,
-            2 => Server2,
-            _ => null!
-        };
-    }
 }
