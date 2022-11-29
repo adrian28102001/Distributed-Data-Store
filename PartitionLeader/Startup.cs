@@ -2,6 +2,7 @@
 using PartitionLeader.Repositories.GenericRepository;
 using PartitionLeader.Services.DataService;
 using PartitionLeader.Services.DistributionService;
+using PartitionLeader.Services.HealthService;
 using PartitionLeader.Services.HttpService;
 using PartitionLeader.Services.ServersDetails;
 using PartitionLeader.Services.Sync;
@@ -29,10 +30,12 @@ public class Startup
 
         services.AddSingleton<IHttpService, HttpService>();
         services.AddSingleton<ITcpService, TcpService>();
+        services.AddSingleton<IHealthService, HealthCheck>();
 
         services.AddSingleton<IServerDetails, ServerDetails>();
 
-        services.AddHostedService<BackgroundTask.BackgroundTask>();;
+        services.AddHostedService<BackgroundTask.HealthCheck>();;
+        services.AddHostedService<BackgroundTask.Sync>();;
     }
 
     public Startup(IConfiguration configuration)

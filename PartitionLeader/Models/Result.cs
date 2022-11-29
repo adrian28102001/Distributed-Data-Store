@@ -1,4 +1,6 @@
-﻿namespace PartitionLeader.Models;
+﻿using PartitionLeader.Setting;
+
+namespace PartitionLeader.Models;
 
 public class Result
 {
@@ -9,9 +11,12 @@ public class Result
     public int Port { get; set; }
 
     public ServerName ServerName { get; set; }
+    public bool IsAlive { get; set; }
 
     public Result()
     {
-        StorageCount = Setting.Settings.ThisPort;
+        Port = Settings.ThisPort;
+        ServerName = Settings.ServerName;
+        IsAlive = true;
     }
 }

@@ -11,15 +11,19 @@ public class GenericRepository<T> : IGenericRepository<T> where T : Entity
         _storage = storage;
     }
 
+    public Task<IDictionary<int, T>> GetAll()
+    {
+        return Task.FromResult(_storage);
+    }
+
     public Task<KeyValuePair<int, T>> GetById(int id)
     {
         return Task.FromResult(_storage.FirstOrDefault(s => s.Key == id));
     }
-
+    
     public Task<Result> Save(int id, T entity)
     {
         _storage.Add(id, entity);
-        
         return Task.FromResult(new Result
         {
             StorageCount = _storage.Count,
@@ -30,6 +34,7 @@ public class GenericRepository<T> : IGenericRepository<T> where T : Entity
     public Task<T> Update(int id, T entity)
     {
         return Task.FromResult(_storage[id] = entity);
+        ;
     }
 
     public Task<Result> Delete(int id)
@@ -40,5 +45,6 @@ public class GenericRepository<T> : IGenericRepository<T> where T : Entity
             StorageCount = _storage.Count,
             LastProcessedId = id
         });
+        ;
     }
 }

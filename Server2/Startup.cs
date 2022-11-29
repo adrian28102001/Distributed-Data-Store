@@ -4,11 +4,11 @@ using Server2.Services.DataService;
 using Server2.Services.DistributionService;
 using Server2.Services.HealthService;
 using Server2.Services.HttpService;
+using Server2.Services.ServersDetails;
 using Server2.Services.Sync;
 using Server2.Services.TcpService;
 
 namespace Server2;
-
 public class Startup
 {
     private IConfiguration ConfigRoot { get; }
@@ -29,11 +29,13 @@ public class Startup
         services.AddSingleton<IDistributionService, DistributionService>();
 
         services.AddSingleton<IHttpService, HttpService>();
-        services.AddSingleton<IHealthService, HealthService>();
         services.AddSingleton<ITcpService, TcpService>();
+        services.AddSingleton<IHealthService, HealthCheck>();
 
-        services.AddHostedService<BackgroundTask.BackgroundTask>();
-        services.AddHostedService<BackgroundTask.HealthCheck>();
+        services.AddSingleton<IServerDetails, ServerDetails>();
+
+        services.AddHostedService<BackgroundTask.HealthCheck>();;
+        services.AddHostedService<BackgroundTask.Sync>();;
     }
 
     public Startup(IConfiguration configuration)
@@ -55,7 +57,10 @@ public class Startup
         app.UseHttpsRedirection();
 
         app.UseRouting();
-        app.UseEndpoints(endpoints => { endpoints.MapControllers(); });
+        app.UseEndpoints(endpoints =>
+        {
+            endpoints.MapControllers();
+        });
 
         app.Run();
     }

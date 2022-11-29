@@ -39,8 +39,4 @@ public class DataStorageService : IDataStorageService
         return await _dataStorageRepository.Delete(id);
     }
 
-    public Task<bool> DoesKeyExist(int id)
-    {
-        return _dataStorageRepository.DoesKeyExist(id);
-    }
 }

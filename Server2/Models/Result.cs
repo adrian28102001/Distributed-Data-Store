@@ -1,4 +1,6 @@
-﻿namespace Server2.Models;
+﻿using Server2.Setting;
+
+namespace Server2.Models;
 
 public class Result
 {
@@ -9,4 +11,12 @@ public class Result
     public int Port { get; set; }
 
     public ServerName ServerName { get; set; }
+    public bool IsAlive { get; set; }
+
+    public Result()
+    {
+        Port = Settings.ThisPort;
+        ServerName = Settings.ServerName;
+        IsAlive = true;
+    }
 }

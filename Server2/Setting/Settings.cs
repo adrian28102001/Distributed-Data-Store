@@ -4,9 +4,9 @@ namespace Server2.Setting;
 
 public static class Settings
 {
-    public static readonly ServerName ServerName = ServerName.Server1;
+    public static readonly ServerName ServerName = ServerName.PartitionLeader;
     
-    public static bool Leader = false;
+    public static readonly bool Leader = true;
     
     public static readonly bool InDocker = false; // set to false when running on localhost
     
@@ -19,7 +19,7 @@ public static class Settings
     public static readonly int Server1TcpSavePort = 8081;
     public static readonly int Server2TcpSavePort = 8082;
     
-    public static readonly int ThisPort = Server1Port;
+    public static readonly int ThisPort = LeaderPort;
     
     public static readonly string BaseUrl = $"https://{ServerIp}:"; //local
 

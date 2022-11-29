@@ -9,7 +9,7 @@ public static class Map
         var fileData = data.File;
         return new Data
         {
-            Id = IdGenerator.GenerateId(),
+            Id = data.Id,
             ContentType = fileData.ContentType,
             FileName = fileData.Name,
             StreamData = ConvertToByte(fileData)
@@ -18,10 +18,12 @@ public static class Map
 
     private static string ConvertToByte(IFormFile file)
     {
-        using var ms = new MemoryStream();
-        file.CopyTo(ms);
-        var fileBytes = ms.ToArray();
-        var s = Convert.ToBase64String(fileBytes);
-        return s;
+        using (var ms = new MemoryStream())
+        {
+            file.CopyTo(ms);
+            var fileBytes = ms.ToArray();
+            var s = Convert.ToBase64String(fileBytes);
+            return s.Substring(0, 100);
+        }
     }
 }

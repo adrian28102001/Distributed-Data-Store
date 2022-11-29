@@ -2,54 +2,58 @@
 using Server2.Helpers;
 using Server2.Helpers.Mappers;
 using Server2.Models;
+using Server2.Services.DataService;
 using Server2.Services.DistributionService;
-using Server2.Setting;
 
 namespace Server2.Controllers;
 
 [ApiController]
 [Route("")]
-public class ServerController : ControllerBase
+public class Controller : ControllerBase
 {
     private readonly IDistributionService _distributionService;
+    private readonly IDataStorageService _dataStorageService;
 
-    public ServerController(IDistributionService distributionService)
+
+    public Controller(IDistributionService distributionService, IDataStorageService dataStorageService)
     {
         _distributionService = distributionService;
+        _dataStorageService = dataStorageService;
     }
 
+    #region CRUD for partition
+
+    [HttpGet("/check")]
+    public Task<bool> CheckStatus()
+    {
+        return Task.FromResult(true);
+    }
 
     [HttpGet("/summary")]
-    public async Task<Result?> GetSummary()
+    public async Task<IList<Result>?> GetSummary()
     {
-        return await Task.FromResult(StorageHelper.GetStatus());
+        return await Task.FromResult(StorageHelper.GetStatusFromServers());
     }
 
     [HttpGet("/all")]
     public async Task<IDictionary<int, Data>?> GetAll()
     {
-        return await _distributionService.GetAll();
+        return await _dataStorageService.GetAll();
     }
 
     [HttpGet("/get/{id}")]
     public async Task<KeyValuePair<int, Data>?> GetById([FromRoute] int id)
     {
-        return await _distributionService.GetById(id);
+        return await _dataStorageService.GetById(id);
     }
 
-    [HttpPut("/update/{id}")]
-    public async Task<Data> Update([FromRoute] int id, [FromBody] Data data)
-    {
-        return await _distributionService.Update(id, data);
-    }
-    
     [HttpPost]
-    public async Task<IList<Result>> Save([FromBody] Data data)
+    public async Task<Result> Save([FromBody] Data data)
     {
-        IList<Result> resultSummaries = new List<Result>();
+        var resultSummaries = new Result();
         try
         {
-            resultSummaries = await _distributionService.Save(data);
+            resultSummaries = await _dataStorageService.Save(data);
         }
         catch (Exception e)
         {
@@ -58,23 +62,11 @@ public class ServerController : ControllerBase
 
         return resultSummaries;
     }
-  
-
-    [HttpDelete("/delete/{id}")]
-    public async Task<IList<Result>> Delete([FromRoute] int id)
-    {
-        return await _distributionService.Delete(id);
-    }
 
 
-    [HttpPut("/form/update/{id}")]
+    [HttpPut("/update/{id}")]
     public async Task<Data> Update([FromRoute] int id, [FromForm] DataModel dataModel)
     {
-        if (!Settings.Leader)
-        {
-            return null;
-        }
-        
         var data = dataModel.MapData();
 
         var updateResult = await _distributionService.Update(id, data);
@@ -82,14 +74,25 @@ public class ServerController : ControllerBase
         return updateResult;
     }
 
-    [HttpPost("/form/save")]
+    #endregion
+
+    #region CRUD for servers
+
+    [HttpGet("servers/all")]
+    public async Task<IDictionary<int, Data>?> GetFromAllServers()
+    {
+        return await _distributionService.GetAll();
+    }
+
+    [HttpGet("/servers/get/{id}")]
+    public async Task<KeyValuePair<int, Data>?> GetByIdFromServer([FromRoute] int id)
+    {
+        return await _distributionService.GetById(id);
+    }
+
+    [HttpPost]
     public async Task<IList<Result>> Save([FromForm] DataModel dataModel)
     {
-        if (!Settings.Leader)
-        {
-            return null;
-        }
-        
         var data = dataModel.MapData();
 
         IList<Result> resultSummaries = new List<Result>();
@@ -105,4 +108,11 @@ public class ServerController : ControllerBase
         return resultSummaries;
     }
 
+    [HttpDelete("/delete/{id}")]
+    public async Task<IList<Result>> Delete([FromRoute] int id)
+    {
+        return await _distributionService.Delete(id);
+    }
+
+    #endregion
 }

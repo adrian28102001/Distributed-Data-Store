@@ -1,9 +1,6 @@
 ﻿using System.Net;
-using System.Text;
-using PartitionLeader.Helpers;
-using PartitionLeader.Models;
 
-namespace PartitionLeader.Services.Ftp;
+namespace Server2.Services.Ftp;
 
 public static class FtpService
 {

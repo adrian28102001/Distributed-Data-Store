@@ -1,12 +1,12 @@
-﻿using Server2.Services.HealthService;
+﻿using Server1.Services.Sync;
 
-namespace Server2.BackgroundTask;
+namespace Server1.BackgroundTask;
 
-public class HealthCheck : BackgroundService
+public class Sync : BackgroundService
 {
     private readonly IServiceScopeFactory _serviceScopeFactory;
 
-    public HealthCheck(IServiceScopeFactory serviceScopeFactory)
+    public Sync(IServiceScopeFactory serviceScopeFactory)
     {
         _serviceScopeFactory = serviceScopeFactory;
     }
@@ -15,7 +15,7 @@ public class HealthCheck : BackgroundService
     {
         await Task.Delay(5000, stoppingToken);
         using var scope = _serviceScopeFactory.CreateScope();
-        var scoped = scope.ServiceProvider.GetRequiredService<IHealthService>();
-        await scoped.CheckHealth();
+        var scoped = scope.ServiceProvider.GetRequiredService<ISyncService>();
+        await scoped.SyncData(stoppingToken);
     }
 }

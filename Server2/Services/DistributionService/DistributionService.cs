@@ -20,34 +20,27 @@ public class DistributionService : IDistributionService
         _tcpService = tcpService;
     }
 
-    public async Task<KeyValuePair<int, Data>?> GetById(int id)
-    {
-        //try get from local storage if not get from clusters
-        var res = await _dataService.GetById(id);
-
-        if (Settings.Leader)
-        {
-            if (res.Value.Value == null)
-            {
-                res = await _httpService.GetById(id, Settings.Server2);
-            }
-        }
-
-        return res;
-    }
-
     public async Task<IDictionary<int, Data>?> GetAll()
     {
-        //call get all from all servers and remove duplicates
-
         var resultDictionary = await _dataService.GetAll();
 
-        if (Settings.Leader)
+        var server1Data = await _httpService.GetAll(Settings.Server1);
+
+        if (resultDictionary != null && server1Data != null)
         {
-            //try to get from server 1 if not get from server 2
+            foreach (var data in server1Data)
+            {
+                if (!resultDictionary.ContainsKey(data.Key))
+                {
+                    resultDictionary.Add(data);
+                }
+            }
+        }
+        else if (resultDictionary != null)
+        {
             var server2Data = await _httpService.GetAll(Settings.Server2);
 
-            if (resultDictionary != null && server2Data != null)
+            if (server2Data != null)
             {
                 foreach (var data in server2Data)
                 {
@@ -62,28 +55,47 @@ public class DistributionService : IDistributionService
         return resultDictionary;
     }
 
-    public async Task<Data> Update(int id, Data data)
+    public async Task<KeyValuePair<int, Data>?> GetById(int id)
     {
-        //update try update all servers
-        if (Settings.Leader)
+        var data = await _dataService.GetById(id);
+        if (data?.Value == null)
         {
-            var server2Data = await _httpService.Update(id, data, Settings.Server2);
+            data = await _httpService.GetById(id, Settings.Server1);
         }
 
-        return await _dataService.Update(id, data);
+        if (data?.Value == null)
+        {
+            data = await _httpService.GetById(id, Settings.Server2);
+        }
+
+        return data;
     }
 
     public async Task<IList<Result>> Save(Data data)
     {
         var results = new List<Result>();
 
-        var result = await _dataService.Save(data);
-        result.UpdateServerStatus();
+        var optimalServerNames = StorageHelper.GetOptimalServers();
 
-        results.Add(result);
+        if (optimalServerNames.Contains(Settings.ServerName))
+        {
+            var result = await _dataService.Save(data);
+            result.UpdateServerStatus();
 
-        //use tcp to save data to other servers
-        if (Settings.Leader)
+            results.Add(result);
+        }
+
+        if (optimalServerNames.Contains(ServerName.Server1))
+        {
+            var server1Response = _tcpService.TcpSave(data, Settings.Server1TcpSavePort);
+            if (server1Response != null)
+            {
+                server1Response.UpdateServerStatus();
+                results.Add(server1Response);
+            }
+        }
+
+        if (optimalServerNames.Contains(ServerName.Server2))
         {
             var server2Response = _tcpService.TcpSave(data, Settings.Server2TcpSavePort);
             if (server2Response != null)
@@ -96,20 +108,38 @@ public class DistributionService : IDistributionService
         return results;
     }
 
+    public async Task<Data> Update(int id, Data data)
+    {
+        await _httpService.Update(id, data, Settings.Server1);
+        await _httpService.Update(id, data, Settings.Server2);
+
+        return await _dataService.Update(id, data);
+    }
+
     public async Task<IList<Result>> Delete(int id)
     {
         var results = new List<Result>();
         var result = await _dataService.Delete(id);
         result.UpdateServerStatus();
 
-        if (Settings.Leader)
-        {
-            var server2Result = await _httpService.Delete(id, Settings.Server2);
+        var server1Result = await _httpService.Delete(id, Settings.Server1);
+        var server2Result = await _httpService.Delete(id, Settings.Server2);
 
-            if (server2Result != null)
+        if (server1Result != null)
+        {
+            foreach (var resultSummary in server1Result)
             {
-                server2Result.UpdateServerStatus();
-                results.Add(server2Result);
+                resultSummary.UpdateServerStatus();
+                results.Add(resultSummary);
+            }
+        }
+
+        if (server2Result != null)
+        {
+            foreach (var resultSummary in server2Result)
+            {
+                resultSummary.UpdateServerStatus();
+                results.Add(resultSummary);
             }
         }
 

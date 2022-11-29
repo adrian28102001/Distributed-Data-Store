@@ -1,12 +1,12 @@
-﻿using Server2.Services.TcpService;
+﻿using Server2.Services.Sync;
 
 namespace Server2.BackgroundTask;
 
-public class BackgroundTask : BackgroundService
+public class Sync : BackgroundService
 {
     private readonly IServiceScopeFactory _serviceScopeFactory;
 
-    public BackgroundTask(IServiceScopeFactory serviceScopeFactory) 
+    public Sync(IServiceScopeFactory serviceScopeFactory)
     {
         _serviceScopeFactory = serviceScopeFactory;
     }
@@ -15,7 +15,7 @@ public class BackgroundTask : BackgroundService
     {
         await Task.Delay(5000, stoppingToken);
         using var scope = _serviceScopeFactory.CreateScope();
-        var scoped = scope.ServiceProvider.GetRequiredService<ITcpService>();
-        await scoped.RunTcp();
+        var scoped = scope.ServiceProvider.GetRequiredService<ISyncService>();
+        await scoped.SyncData(stoppingToken);
     }
 }

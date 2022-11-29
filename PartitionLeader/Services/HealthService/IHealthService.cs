@@ -1,4 +1,4 @@
-﻿namespace Server2.Services.HealthService;
+﻿namespace PartitionLeader.Services.HealthService;
 
 public interface IHealthService
 {

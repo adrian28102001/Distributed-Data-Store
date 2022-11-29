@@ -1,6 +1,7 @@
-﻿using Server2.Services.HealthService;
+﻿using PartitionLeader.Services.HealthService;
+using PartitionLeader.Services.Sync;
 
-namespace Server2.BackgroundTask;
+namespace PartitionLeader.BackgroundTask;
 
 public class HealthCheck : BackgroundService
 {

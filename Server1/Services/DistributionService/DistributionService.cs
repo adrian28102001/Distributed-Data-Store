@@ -22,29 +22,26 @@ public class DistributionService : IDistributionService
 
     public async Task<KeyValuePair<int, Data>?> GetById(int id)
     {
-        //try get from local storage if not get from clusters
-        var res = await _dataService.GetById(id);
-
-        if (Settings.Leader)
+        var data = await _dataService.GetById(id);
+        if (data?.Value == null)
         {
-            if (res.Value.Value == null)
-            {
-                res = await _httpService.GetById(id, Settings.Server2);
-            }
+            data = await _httpService.GetById(id, Settings.Server1);
         }
 
-        return res;
+        if (data?.Value == null)
+        {
+            data = await _httpService.GetById(id, Settings.Server2);
+        }
+
+        return data;
     }
 
     public async Task<IDictionary<int, Data>?> GetAll()
     {
-        //call get all from all servers and remove duplicates
-
         var resultDictionary = await _dataService.GetAll();
 
         if (Settings.Leader)
         {
-            //try to get from server 1 if not get from server 2
             var server2Data = await _httpService.GetAll(Settings.Server2);
 
             if (resultDictionary != null && server2Data != null)
@@ -64,7 +61,6 @@ public class DistributionService : IDistributionService
 
     public async Task<Data> Update(int id, Data data)
     {
-        //update try update all servers
         if (Settings.Leader)
         {
             var server2Data = await _httpService.Update(id, data, Settings.Server2);
@@ -76,15 +72,10 @@ public class DistributionService : IDistributionService
     public async Task<IList<Result>> Save(Data data)
     {
         var results = new List<Result>();
-
-        var result = await _dataService.Save(data);
-        result.UpdateServerStatus();
-
-        results.Add(result);
-
-        //use tcp to save data to other servers
         if (Settings.Leader)
         {
+            data.Id = IdGenerator.GenerateId();
+
             var server2Response = _tcpService.TcpSave(data, Settings.Server2TcpSavePort);
             if (server2Response != null)
             {
@@ -92,6 +83,11 @@ public class DistributionService : IDistributionService
                 results.Add(server2Response);
             }
         }
+
+        var result = await _dataService.Save(data);
+        result.UpdateServerStatus();
+
+        results.Add(result);
 
         return results;
     }

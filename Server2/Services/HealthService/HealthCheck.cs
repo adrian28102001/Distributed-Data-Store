@@ -4,43 +4,51 @@ using Server2.Setting;
 
 namespace Server2.Services.HealthService;
 
-public class HealthService : IHealthService
+public class HealthCheck : IHealthService
 {
     public async Task CheckHealth()
     {
         await Task.Delay(10000);
-
-        //check if the partition leader is healthy
+        
         try
         {
-            while (await IsPartitionLeaderHealthy())
+            while (true)
             {
                 await Task.Delay(10000);
-            }
+                var server1Health = await IsServerHealthy(Settings.Server1);
+                var server2Health = await IsServerHealthy(Settings.Server2);
 
-            ConsoleHelper.Print($"Server 1 is leader now", ConsoleColor.Green);
-            Settings.Leader = true;
+                if (!server1Health)
+                {
+                    StorageHelper.Server1Status.SetServerStatus(server1Health);
+                    ConsoleHelper.Print($"Server 1 is down", ConsoleColor.Red);
+                    break;
+                }
+                if (!server2Health)
+                {
+                    StorageHelper.Server2Status.SetServerStatus(server2Health);
+                    ConsoleHelper.Print($"Server 2 is down", ConsoleColor.Red);
+                    break;
+                }
+            }
         }
         catch (Exception e)
         {
-            ConsoleHelper.Print($"Partition leader check failed. Server 1 is leader now", ConsoleColor.DarkRed);
-            Settings.Leader = true;
+            ConsoleHelper.Print($"Health check failed", ConsoleColor.DarkRed);
         }
     }
 
-    private static async Task<bool> IsPartitionLeaderHealthy()
+    private static async Task<bool> IsServerHealthy(string url)
     {
         try
         {
-            var url = Settings.PartitionLeader;
-
             using var client = new HttpClient();
-
+            
             var response = await client.GetAsync($"{url}/check");
-
+            
             var dataAsJson = await response.Content.ReadAsStringAsync();
             var deserialized = JsonConvert.DeserializeObject<bool>(dataAsJson);
-
+            
             ConsoleHelper.Print($"Partition leader is healthy", ConsoleColor.Green);
             return deserialized;
         }

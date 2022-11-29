@@ -41,7 +41,7 @@ public class DataStorageRepository : IDataStorageRepository
 
     public async Task<bool> DoesKeyExist(int id)
     {
-        var dictionary = await GetAll();
+        var dictionary = await _genericRepository.GetAll();
         return await Task.FromResult(dictionary.ContainsKey(id));
     }
 }
